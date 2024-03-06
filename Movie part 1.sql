@@ -1,0 +1,48 @@
+-- Movie Theatre DB
+create table CUSTOMER (
+	CUSTOMER_ID SERIAL primary key,
+	FIRST_NAME VARCHAR(100),
+	LAST_NAME VARCHAR(100),
+	EMAIL VARCHAR(150),
+	PHONE_NUMBER VARCHAR(25)
+);
+
+create table INVENTORY (
+	UPC SERIAL primary key,
+	PRODUCT_AMOUNT INTEGER
+);
+
+create table CONCESSION (
+	ORDER_ID SERIAL primary key,
+	ORDER_DATE DATE default CURRENT_DATE,
+	TOTAL_COST NUMERIC(10,2),
+	UPC INTEGER not null,
+	foreign KEY(UPC) references INVENTORY(UPC)
+);
+
+create table TICKET (
+	TICKET_ID SERIAL primary key,
+	CUSTOMER_ID INTEGER not null,
+	ORDER_ID SERIAL not null,
+	COST_ numeric(8,2),
+	foreign KEY(CUSTOMER_ID) references CUSTOMER(CUSTOMER_ID),
+	foreign KEY(ORDER_ID) REFERENCES CONCESSION(ORDER_ID)
+);
+
+
+create table MOVIE (
+	MOVIE_ID SERIAL primary key,
+	MOVIE_NAME VARCHAR(100),
+	CUSTOMER_ID INTEGER not NULL,
+	foreign KEY(CUSTOMER_ID) references CUSTOMER(CUSTOMER_ID)
+);
+
+create table PRODUCT (
+	ITEM_ID SERIAL primary key,
+	AMOUNT NUMERIC(8,2),
+	PROD_NAME VARCHAR(100),
+	MOVIE_ID INTEGER not null,
+	UPC INTEGER not null,
+	foreign KEY(MOVIE_ID) references MOVIE(MOVIE_ID),
+	foreign KEY(UPC) references INVENTORY(UPC)
+);
